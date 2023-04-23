@@ -1,0 +1,18 @@
+
+[SERVICE]
+  Flush        1
+  Parsers_File parsers.conf
+
+[INPUT]
+  Name     syslog
+  Parser   syslog-rfc3164
+  Listen   0.0.0.0
+  Port     5140
+  Mode     udp
+
+[OUTPUT]
+  Name es
+  Host elasticsearch
+  Replace_Dots On
+  index test
+  match *

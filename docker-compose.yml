@@ -1,0 +1,54 @@
+version: "3"
+services:
+  fluentbit:
+    image: fluent/fluent-bit:1.0.4
+    container_name: fluent
+    command: /fluent-bit/bin/fluent-bit -c /fluent-bit/etc/fluent-bit.conf
+    volumes:
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./parsers.conf:/fluent-bit/etc/parsers.conf
+      - /var/log/IBSng/:/var/log/IBSng/
+      - /etc/rsyslog.conf://fluent-bit/etc/rsyslog.conf
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+#    ports:
+#      - "5140:5140/udp"
+    restart: unless-stopped
+
+###########################################################
+
+  elasticsearch:
+    image: elasticsearch:7.17.0
+    container_name: elasticsearch
+    environment:
+      - "discovery.type=single-node"
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=123456
+    expose:
+      - "9200"
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./elsatic-data:/var/lib/elasticsearch/data
+    restart: unless-stopped
+
+
+###########################################################
+
+  kibana:
+    image: kibana:7.17.0
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - XPACK_MONITORING_ENABLED=true
+      - XPACK_MONITORING_COLLECTION_ENABLED=true
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD="123456"            
+    volumes:
+      - ./kibana-data:/var/lib/kibana/data
+    depends_on:
+      - elasticsearch
+
+    restart: unless-stopped

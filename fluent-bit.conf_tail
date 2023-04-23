@@ -1,0 +1,12 @@
+[INPUT]
+  Name tail
+  path /var/log/IBSng/WS/*.log
+
+
+
+[OUTPUT]
+  Name es
+  match *
+  Host elasticsearch
+  Replace_Dots On
+  index test

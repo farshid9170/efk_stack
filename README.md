@@ -1,8 +1,7 @@
 # efk_stack
 
-elasticsearch-fluentbit-kibana
 
-Welcome to the `efk-stack-fluent-bit-elasticsearch-kibana` Git project!
+Welcome to the `efk-stack : fluent-bit-elasticsearch-kibana` Git project!
 
 This project aims to provide clear instructions and configuration files for setting up an EFK (Elasticsearch, Fluent Bit, Kibana) Stack for log aggregation and analysis.
 
